@@ -1,6 +1,7 @@
 import os
 import socket
 import time
+import importlib
 
 # Define the IP address and port of Machine A
 machine_a_ip = '192.168.0.177'
@@ -111,6 +112,13 @@ def read_timecode_over_network(host, port):
             print("Retrying connection...")
             time.sleep(5)  # Wait for 5 seconds before retrying connection
 
+
+# Dynamically import custom functions
+custom_functions = importlib.import_module('custom_functions')
+all_names = dir(custom_functions)
+function_names = [name for name in all_names if callable(getattr(custom_functions, name))]
+for name in function_names:
+    globals()[name] = getattr(custom_functions, name)
 
 # Example usage
 read_timecode_over_network(machine_a_ip, machine_a_port)
