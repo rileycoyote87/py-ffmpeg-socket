@@ -2,6 +2,7 @@ import os
 import socket
 import time
 import importlib
+import datetime
 
 # Define the IP address and port of Machine A
 machine_a_ip = '192.168.0.177'
@@ -72,7 +73,10 @@ def read_timecode_over_network(host, port):
                             if within_buffer(received_timecode, target['timecode'], buffer_milliseconds):
                                 # Check if the trigger flag for this timecode is not set
                                 if not trigger_flags[target['timecode']]:
-                                    print(f"TARGET TIME REACHED: {received_timecode}")
+                                    # Get the current time with microseconds
+                                    current_time = datetime.datetime.now().strftime("%H:%M:%S:%f")[:-3]
+
+                                    print(f"Timecode triggered: {received_timecode} - Current time: {current_time}")
                                     if target['action']:
                                         execute_action(target['action'])
                                     # Set the trigger flag for this timecode
